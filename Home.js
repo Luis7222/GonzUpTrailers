@@ -93,14 +93,14 @@
   <div class="container">
     <!-- TRAILERS REMAIN UNCHANGED -->
     <a href="trailer1.html" style="text-decoration: none; color: inherit;"><div class="trailer-card">
-      <img src="/mnt/data/IMG_4235.jpg" alt="Trailer 1">
+      <img src="trailerpics/trailer1.jpg" alt="Trailer 1">
       <div class="details">
         <p>Status: <span class="available">Available for Rent</span></p>
         <p>Sale Price: $<span id="price1">[Enter price]</span></p>
       </div></div></a>
 
     <div class="trailer-card">
-      <img src="/mnt/data/IMG_4236.jpg" alt="Trailer 2">
+      <img src="trailerpics/trailer3.jpg" alt="Trailer 2">
       <div class="details">
         <p>Status: <span class="unavailable">Currently Rented</span></p>
         <p>Sale Price: $<span id="price2">[Enter price]</span></p>
@@ -108,7 +108,7 @@
     </div>
 
     <div class="trailer-card">
-      <img src="/mnt/data/IMG_4238.jpg" alt="Trailer 3">
+      <img src="trailerpics/trailer4.jpg" alt="Trailer 3">
       <div class="details">
         <p>Status: <span class="available">Available for Rent</span></p>
         <p>Sale Price: $<span id="price3">[Enter price]</span></p>
@@ -116,7 +116,7 @@
     </div>
 
     <div class="trailer-card">
-      <img src="/mnt/data/IMG_4852.jpg" alt="Trailer 4">
+      <img src="trailerpics/trailer6.jpg" alt="Trailer 4">
       <div class="details">
         <p>Status: <span class="available">Available for Rent</span></p>
         <p>Sale Price: $<span id="price4">[Enter price]</span></p>
@@ -124,7 +124,7 @@
     </div>
 
     <div class="trailer-card">
-      <img src="/mnt/data/IMG_4853.jpg" alt="Trailer 5">
+      <img src="trailerpics/trailer7.jpg" alt="Trailer 5">
       <div class="details">
         <p>Status: <span class="unavailable">Currently Rented</span></p>
         <p>Sale Price: $<span id="price5">[Enter price]</span></p>
@@ -132,7 +132,7 @@
     </div>
 
     <div class="trailer-card">
-      <img src="/mnt/data/IMG_8789.jpg" alt="Trailer 6">
+      <img src="trailerpics/trailer8.jpg" alt="Trailer 6">
       <div class="details">
         <p>Status: <span class="available">Available for Rent</span></p>
         <p>Sale Price: $<span id="price6">[Enter price]</span></p>
@@ -140,7 +140,7 @@
     </div>
 
     <div class="trailer-card">
-      <img src="/mnt/data/IMG_8790.jpg" alt="Trailer 7">
+      <img src="trailerpics/trailer9.jpg" alt="Trailer 7">
       <div class="details">
         <p>Status: <span class="available">Available for Rent</span></p>
         <p>Sale Price: $<span id="price7">[Enter price]</span></p>
@@ -148,7 +148,7 @@
     </div>
 
     <div class="trailer-card">
-      <img src="/mnt/data/IMG_8791.jpg" alt="Trailer 8">
+      <img src="trailerpics/trailer10.jpg" alt="Trailer 8">
       <div class="details">
         <p>Status: <span class="unavailable">Currently Rented</span></p>
         <p>Sale Price: $<span id="price8">[Enter price]</span></p>
@@ -156,7 +156,7 @@
     </div>
 
     <div class="trailer-card">
-      <img src="/mnt/data/IMG_8793.jpg" alt="Trailer 9">
+      <img src="trailerpics/trailer11.jpg" alt="Trailer 9">
       <div class="details">
         <p>Status: <span class="available">Available for Rent</span></p>
         <p>Sale Price: $<span id="price9">[Enter price]</span></p>
