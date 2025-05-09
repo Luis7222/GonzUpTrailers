@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>GonzUp Trailers Leasing</title>
-<link rel="icon" type="image/png" href="trailerpics/logo.png">
+  <link rel="icon" type="image/png" href="trailerpics/logo.png">
   <style>
     body {
       margin: 0;
@@ -25,6 +25,15 @@
     header p {
       margin: 0;
       font-size: 1.2em;
+    }
+    .controls {
+      text-align: center;
+      padding: 20px;
+    }
+    .controls input, .controls button {
+      padding: 10px;
+      font-size: 1em;
+      margin: 5px;
     }
     .container {
       display: flex;
@@ -83,6 +92,31 @@
       }
     }
   </style>
+  <script>
+    function filterAvailable() {
+      const cards = document.querySelectorAll('.trailer-card');
+      cards.forEach(card => {
+        const status = card.querySelector('.available');
+        card.parentElement.style.display = status ? 'block' : 'none';
+      });
+    }
+
+    function showAll() {
+      const cards = document.querySelectorAll('.trailer-card');
+      cards.forEach(card => {
+        card.parentElement.style.display = 'block';
+      });
+    }
+
+    function searchTrailers() {
+      const input = document.getElementById('searchInput').value.toLowerCase();
+      const cards = document.querySelectorAll('.trailer-card');
+      cards.forEach(card => {
+        const text = card.innerText.toLowerCase();
+        card.parentElement.style.display = text.includes(input) ? 'block' : 'none';
+      });
+    }
+  </script>
 </head>
 <body>
   <header>
@@ -92,87 +126,108 @@
     <p>Call: <a href="tel:9562509968" style="color: #fff; text-decoration: underline;">956-250-9968</a> or Text: <a href="sms:9563299061" style="color: #fff; text-decoration: underline;">956-329-9061</a></p>
   </header>
 
+  <!-- Banner Image -->
+  <img src="trailerpics/header.jpg" alt="Header Banner" style="width: 100%; height: auto; max-height: 400px; object-fit: cover; display: block; margin-bottom: 30px;">
+
+  <!-- Controls -->
+  <div class="controls">
+    <input type="text" id="searchInput" placeholder="Search model, year, or type..." oninput="searchTrailers()">
+    <button onclick="filterAvailable()">Show Available Only</button>
+    <button onclick="showAll()">Show All</button>
+  </div>
+
+  <!-- Trailer Cards -->
   <div class="container">
-    <a href="trailer1.html" style="text-decoration: none; color: inherit;"><div class="trailer-card">
-      <img src="trailerpics/trailer12.jpg" alt="Trailer 1">
-      <div class="details">
-        <p>1999 CPS Belly Dump</p>
-        <p>Status: <span class="available">Available for Rent</span></p>
-        <p>Sale Price: $<span id="price1">21,000</span></p>
+    <a href="trailer1.html" style="text-decoration: none; color: inherit;">
+      <div class="trailer-card">
+        <img src="trailerpics/trailer12.jpg" alt="Trailer 1">
+        <div class="details">
+          <p>1999 CPS Belly Dump</p>
+          <p>Status: <span class="available">Available for Rent</span></p>
+          <p>Sale Price: $<span id="price1">21,000</span></p>
+        </div>
       </div>
-    </div></a>
-
-    <a href="trailer2.html" style="text-decoration: none; color: inherit;"><div class="trailer-card">
-      <img src="trailerpics/trailer13.jpg" alt="Trailer 2">
-      <div class="details">
-        <p>2003 LUFKIN Belly Dump</p>
-        <p>Status: <span class="unavailable">Currently Rented</span></p>
-        <p>Sale Price: $<span id="price2">22,500</span></p>
+    </a>
+    <a href="trailer2.html" style="text-decoration: none; color: inherit;">
+      <div class="trailer-card">
+        <img src="trailerpics/trailer13.jpg" alt="Trailer 2">
+        <div class="details">
+          <p>2003 LUFKIN Belly Dump</p>
+          <p>Status: <span class="unavailable">Currently Rented</span></p>
+          <p>Sale Price: $<span id="price2">22,500</span></p>
+        </div>
       </div>
-    </div></a>
-
-    <a href="trailer3.html" style="text-decoration: none; color: inherit;"><div class="trailer-card">
-      <img src="trailerpics/trailer4.jpg" alt="Trailer 3">
-      <div class="details">
-        <p>2003 LOAD KING Belly Dump</p>
-        <p>Status: <span class="available">Available for Rent</span></p>
-        <p>Sale Price: $<span id="price3">23,000</span></p>
+    </a>
+    <a href="trailer3.html" style="text-decoration: none; color: inherit;">
+      <div class="trailer-card">
+        <img src="trailerpics/trailer4.jpg" alt="Trailer 3">
+        <div class="details">
+          <p>2003 LOAD KING Belly Dump</p>
+          <p>Status: <span class="available">Available for Rent</span></p>
+          <p>Sale Price: $<span id="price3">23,000</span></p>
+        </div>
       </div>
-    </div></a>
-
-    <a href="trailer4.html" style="text-decoration: none; color: inherit;"><div class="trailer-card">
-      <img src="trailerpics/trailer6.jpg" alt="Trailer 4">
-      <div class="details">
-        <p>2007 CONSTRUCTION Belly Dump</p>
-        <p>Status: <span class="available">Available for Rent</span></p>
-        <p>Sale Price: $<span id="price4">24,500</span></p>
+    </a>
+    <a href="trailer4.html" style="text-decoration: none; color: inherit;">
+      <div class="trailer-card">
+        <img src="trailerpics/trailer6.jpg" alt="Trailer 4">
+        <div class="details">
+          <p>2007 CONSTRUCTION Belly Dump</p>
+          <p>Status: <span class="available">Available for Rent</span></p>
+          <p>Sale Price: $<span id="price4">24,500</span></p>
+        </div>
       </div>
-    </div></a>
-
-    <a href="trailer5.html" style="text-decoration: none; color: inherit;"><div class="trailer-card">
-      <img src="trailerpics/trailer7.jpg" alt="Trailer 5">
-      <div class="details">
-        <p>2007 TRAILBLAZER Belly Dump</p>
-        <p>Status: <span class="unavailable">Currently Rented</span></p>
-        <p>Sale Price: $<span id="price5">24,199</span></p>
+    </a>
+    <a href="trailer5.html" style="text-decoration: none; color: inherit;">
+      <div class="trailer-card">
+        <img src="trailerpics/trailer7.jpg" alt="Trailer 5">
+        <div class="details">
+          <p>2007 TRAILBLAZER Belly Dump</p>
+          <p>Status: <span class="unavailable">Currently Rented</span></p>
+          <p>Sale Price: $<span id="price5">24,199</span></p>
+        </div>
       </div>
-    </div></a>
-
-    <a href="trailer6.html" style="text-decoration: none; color: inherit;"><div class="trailer-card">
-      <img src="trailerpics/trailer8.jpg" alt="Trailer 6">
-      <div class="details">
-        <p>2008 CPS Belly Dump</p>
-        <p>Status: <span class="available">Available for Rent</span></p>
-        <p>Sale Price: $<span id="price6">25,400</span></p>
+    </a>
+    <a href="trailer6.html" style="text-decoration: none; color: inherit;">
+      <div class="trailer-card">
+        <img src="trailerpics/trailer8.jpg" alt="Trailer 6">
+        <div class="details">
+          <p>2008 CPS Belly Dump</p>
+          <p>Status: <span class="available">Available for Rent</span></p>
+          <p>Sale Price: $<span id="price6">25,400</span></p>
+        </div>
       </div>
-    </div></a>
-
-    <a href="trailer7.html" style="text-decoration: none; color: inherit;"><div class="trailer-card">
-      <img src="trailerpics/trailer9.jpg" alt="Trailer 7">
-      <div class="details">
-        <p>2009 CTSI Belly Dump</p>
-        <p>Status: <span class="available">Available for Rent</span></p>
-        <p>Sale Price: $<span id="price7">26,100</span></p>
+    </a>
+    <a href="trailer7.html" style="text-decoration: none; color: inherit;">
+      <div class="trailer-card">
+        <img src="trailerpics/trailer9.jpg" alt="Trailer 7">
+        <div class="details">
+          <p>2009 CTSI Belly Dump</p>
+          <p>Status: <span class="available">Available for Rent</span></p>
+          <p>Sale Price: $<span id="price7">26,100</span></p>
+        </div>
       </div>
-    </div></a>
-
-    <a href="trailer8.html" style="text-decoration: none; color: inherit;"><div class="trailer-card">
-      <img src="trailerpics/trailer10.jpg" alt="Trailer 8">
-      <div class="details">
-        <p>1999 CPS Belly Dump</p>
-        <p>Status: <span class="unavailable">Currently Rented</span></p>
-        <p>Sale Price: $<span id="price8">21,100</span></p>
+    </a>
+    <a href="trailer8.html" style="text-decoration: none; color: inherit;">
+      <div class="trailer-card">
+        <img src="trailerpics/trailer10.jpg" alt="Trailer 8">
+        <div class="details">
+          <p>1999 CPS Belly Dump</p>
+          <p>Status: <span class="unavailable">Currently Rented</span></p>
+          <p>Sale Price: $<span id="price8">21,100</span></p>
+        </div>
       </div>
-    </div></a>
-
-    <a href="trailer9.html" style="text-decoration: none; color: inherit;"><div class="trailer-card">
-      <img src="trailerpics/trailer11.jpg" alt="Trailer 9">
-      <div class="details">
-        <p>2001 CPS Belly Dump</p>
-        <p>Status: <span class="available">Available for Rent</span></p>
-        <p>Sale Price: $<span id="price9">21,900</span></p>
+    </a>
+    <a href="trailer9.html" style="text-decoration: none; color: inherit;">
+      <div class="trailer-card">
+        <img src="trailerpics/trailer11.jpg" alt="Trailer 9">
+        <div class="details">
+          <p>2001 CPS Belly Dump</p>
+          <p>Status: <span class="available">Available for Rent</span></p>
+          <p>Sale Price: $<span id="price9">21,900</span></p>
+        </div>
       </div>
-    </div></a>
+    </a>
   </div>
 
   <footer>
