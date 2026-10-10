@@ -15,6 +15,7 @@ create table if not exists public.owner_accounts (
 alter table public.trailers enable row level security;
 alter table public.owner_accounts enable row level security;
 create policy "Anyone can read trailer status" on public.trailers for select to anon,authenticated using (true);
+create policy "Owners can read own membership" on public.owner_accounts for select to authenticated using (user_id = (select auth.uid()));
 create policy "Owner can update trailer status" on public.trailers for update to authenticated using (exists (select 1 from public.owner_accounts where user_id = (select auth.uid()))) with check (exists (select 1 from public.owner_accounts where user_id = (select auth.uid())));
 -- After signing in for the first time, insert YOUR user UUID using the SQL editor:
 -- insert into public.owner_accounts(user_id) values ('YOUR_AUTH_USER_UUID');
