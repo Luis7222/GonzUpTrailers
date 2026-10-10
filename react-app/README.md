@@ -25,3 +25,22 @@ This is an isolated React/Vite implementation. The original root HTML website re
 - This PR is independent of the previous GitHub Actions status-management PR. Choose ONE system for production; do not merge both implementations without reconciliation.
 - The frontend owner route is publicly reachable but protected server-side by Supabase authentication and row-level security. Merely hiding a route is not security.
 - Before deployment, verify hosting path, asset URLs, auth redirect URL, email sign-in, row-level security, and the status-change workflow in a staging environment.
+
+## Current GonzUp Supabase project
+
+- Project URL: `https://hfxjrrldqjjuvnrrilaz.supabase.co`
+- The public publishable key is set in `.env.production`. **Never put secret/service-role keys in this file.**
+- The production SQL migration adds a self-read policy for `owner_accounts`; the schema file includes the same policy for new environments.
+- One existing authenticated owner has been added to `owner_accounts` in the live project.
+- Email sign-in redirects to `?owner=1`; add the eventual deployed URL with `?owner=1` to Supabase Auth > URL Configuration > Redirect URLs, and set the Site URL to the deployed origin.
+
+## Suggested hosting: Cloudflare Pages
+
+For a new deployment, connect this GitHub repository to Cloudflare Pages, select the React migration branch for a preview, and configure:
+
+- Root directory: `react-app`
+- Build command: `npm run build`
+- Build output directory: `dist` **relative to the repository root** (the Vite config outputs `../dist` from `react-app`). Cloudflare's build-output field may be relative to the root directory; if so enter `../dist` instead. Verify with the first build logs.
+- Framework preset: Vite (or None if specifying commands manually).
+
+**Do not publish to the business domain until a preview passes:** image checks, login, owner-only updates, and public status refresh. Existing root HTML is intentionally unchanged.
