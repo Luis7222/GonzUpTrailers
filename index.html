@@ -96,8 +96,8 @@
     function filterAvailable() {
       const cards = document.querySelectorAll('.trailer-card');
       cards.forEach(card => {
-        const status = card.querySelector('.available');
-        card.parentElement.style.display = status ? 'block' : 'none';
+        const status = card.querySelector('[data-trailer-id]');
+        card.parentElement.style.display = status && status.dataset.status === 'available' ? 'block' : 'none';
       });
     }
 
@@ -116,6 +116,27 @@
         card.parentElement.style.display = text.includes(input) ? 'block' : 'none';
       });
     }
+  </script>
+<script>
+    const statusLabels = { available: 'Available for Rent', rented: 'Currently Rented', in_service: 'In Service' };
+    async function syncTrailerStatus() {
+      try {
+        const response = await fetch('trailer-status.json', { cache: 'no-store' });
+        if (!response.ok) throw new Error('Status data unavailable');
+        const statuses = await response.json();
+        document.querySelectorAll('[data-trailer-id]').forEach(element => {
+          const status = statuses[element.dataset.trailerId];
+          if (!statusLabels[status]) return;
+          element.textContent = statusLabels[status];
+          element.classList.toggle('available', status === 'available');
+          element.classList.toggle('unavailable', status !== 'available');
+          element.dataset.status = status;
+        });
+      } catch (error) {
+        console.warn('Using existing trailer status until status data is available.', error);
+      }
+    }
+    document.addEventListener('DOMContentLoaded', syncTrailerStatus);
   </script>
 </head>
 <body>
@@ -143,7 +164,7 @@
         <img src="trailerpics/trailer12.jpg" alt="Trailer 1">
         <div class="details">
           <p>1999 CPS Belly Dump</p>
-          <p>Status: <span class="available">Available for Rent</span></p>
+          <p>Status: <span data-trailer-id="trailer1" class="available">Available for Rent</span></p>
           <p>Sale Price: $<span id="price1">21,000</span></p>
         </div>
       </div>
@@ -153,7 +174,7 @@
         <img src="trailerpics/trailer13.jpg" alt="Trailer 2">
         <div class="details">
           <p>2003 LUFKIN Belly Dump</p>
-          <p>Status: <span class="unavailable">Currently Rented</span></p>
+          <p>Status: <span data-trailer-id="trailer2" class="unavailable">Currently Rented</span></p>
           <p>Sale Price: $<span id="price2">22,500</span></p>
         </div>
       </div>
@@ -163,7 +184,7 @@
         <img src="trailerpics/trailer4.jpg" alt="Trailer 3">
         <div class="details">
           <p>2003 LOAD KING Belly Dump</p>
-          <p>Status: <span class="available">Available for Rent</span></p>
+          <p>Status: <span data-trailer-id="trailer3" class="available">Available for Rent</span></p>
           <p>Sale Price: $<span id="price3">23,000</span></p>
         </div>
       </div>
@@ -173,7 +194,7 @@
         <img src="trailerpics/trailer6.jpg" alt="Trailer 4">
         <div class="details">
           <p>2007 CONSTRUCTION Belly Dump</p>
-          <p>Status: <span class="available">Available for Rent</span></p>
+          <p>Status: <span data-trailer-id="trailer4" class="available">Available for Rent</span></p>
           <p>Sale Price: $<span id="price4">24,500</span></p>
         </div>
       </div>
@@ -183,7 +204,7 @@
         <img src="trailerpics/trailer7.jpg" alt="Trailer 5">
         <div class="details">
           <p>2007 TRAILBLAZER Belly Dump</p>
-          <p>Status: <span class="unavailable">Currently Rented</span></p>
+          <p>Status: <span data-trailer-id="trailer5" class="unavailable">Currently Rented</span></p>
           <p>Sale Price: $<span id="price5">24,199</span></p>
         </div>
       </div>
@@ -193,7 +214,7 @@
         <img src="trailerpics/trailer8.jpg" alt="Trailer 6">
         <div class="details">
           <p>2008 CPS Belly Dump</p>
-          <p>Status: <span class="available">Available for Rent</span></p>
+          <p>Status: <span data-trailer-id="trailer6" class="available">Available for Rent</span></p>
           <p>Sale Price: $<span id="price6">25,400</span></p>
         </div>
       </div>
@@ -203,7 +224,7 @@
         <img src="trailerpics/trailer9.jpg" alt="Trailer 7">
         <div class="details">
           <p>2009 CTSI Belly Dump</p>
-          <p>Status: <span class="available">Available for Rent</span></p>
+          <p>Status: <span data-trailer-id="trailer7" class="available">Available for Rent</span></p>
           <p>Sale Price: $<span id="price7">26,100</span></p>
         </div>
       </div>
@@ -213,7 +234,7 @@
         <img src="trailerpics/trailer10.jpg" alt="Trailer 8">
         <div class="details">
           <p>1999 CPS Belly Dump</p>
-          <p>Status: <span class="unavailable">Currently Rented</span></p>
+          <p>Status: <span data-trailer-id="trailer8" class="unavailable">Currently Rented</span></p>
           <p>Sale Price: $<span id="price8">21,100</span></p>
         </div>
       </div>
@@ -223,7 +244,7 @@
         <img src="trailerpics/trailer11.jpg" alt="Trailer 9">
         <div class="details">
           <p>2001 CPS Belly Dump</p>
-          <p>Status: <span class="available">Available for Rent</span></p>
+          <p>Status: <span data-trailer-id="trailer9" class="available">Available for Rent</span></p>
           <p>Sale Price: $<span id="price9">21,900</span></p>
         </div>
       </div>
