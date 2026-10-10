@@ -48,6 +48,27 @@
       font-size: 0.9em;
     }
   </style>
+<script>
+    const statusLabels = { available: 'Available for Rent', rented: 'Currently Rented', in_service: 'In Service' };
+    async function syncTrailerStatus() {
+      try {
+        const response = await fetch('trailer-status.json', { cache: 'no-store' });
+        if (!response.ok) throw new Error('Status data unavailable');
+        const statuses = await response.json();
+        document.querySelectorAll('[data-trailer-id]').forEach(element => {
+          const status = statuses[element.dataset.trailerId];
+          if (!statusLabels[status]) return;
+          element.textContent = statusLabels[status];
+          element.classList.toggle('available', status === 'available');
+          element.classList.toggle('unavailable', status !== 'available');
+          element.dataset.status = status;
+        });
+      } catch (error) {
+        console.warn('Using existing trailer status until status data is available.', error);
+      }
+    }
+    document.addEventListener('DOMContentLoaded', syncTrailerStatus);
+  </script>
 </head>
 <body>
   <header>
@@ -58,7 +79,7 @@
   <div class="container">
     <img src="trailerpics/trailer13.jpg" alt="Trailer 1">
 
-    <h2>Available for Rent</h2>
+    <h2 data-trailer-id="trailer2" class="unavailable">Currently Rented</h2>
     <p><strong>For sale: $22,500</strong></p>
     <p><strong>Monthly Rental Cost:</strong> $1000</p>
     <p><strong>Security Deposit:</strong> $1000 (refundable)</p>
