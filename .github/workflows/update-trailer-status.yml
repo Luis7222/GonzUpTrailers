@@ -1,0 +1,63 @@
+name: Update trailer status
+on:
+  workflow_dispatch:
+    inputs:
+      trailer:
+        description: Trailer to update
+        required: true
+        type: choice
+        options:
+          - "trailer1 - 1999 CPS (#1)"
+          - "trailer2 - 2003 Lufkin (#2)"
+          - "trailer3 - 2003 Load King (#3)"
+          - "trailer4 - 2007 Construction (#4)"
+          - "trailer5 - 2007 Trailblazer (#5)"
+          - "trailer6 - 2008 CPS (#6)"
+          - "trailer7 - 2009 CTSI (#7)"
+          - "trailer8 - 1999 CPS (#8)"
+          - "trailer9 - 2001 CPS (#9)"
+      status:
+        description: New status
+        required: true
+        type: choice
+        options:
+          - available
+          - rented
+          - in_service
+permissions:
+  contents: write
+concurrency:
+  group: trailer-status-update
+  cancel-in-progress: false
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+      - name: Update selected trailer
+        env:
+          TRAILER: ${{ inputs.trailer }}
+          STATUS: ${{ inputs.status }}
+        run: |
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          path = Path("trailer-status.json")
+          data = json.loads(path.read_text())
+          key = os.environ["TRAILER"].split(" - ", 1)[0]
+          assert key in data, "Unknown trailer"
+          assert os.environ["STATUS"] in ("available", "rented", "in_service")
+          data[key] = os.environ["STATUS"]
+          path.write_text(json.dumps(data, indent=2) + "\n")
+          PY
+      - name: Publish status change
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add trailer-status.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Update trailer rental status"
+            git push
+          fi
