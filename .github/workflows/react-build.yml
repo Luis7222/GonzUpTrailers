@@ -1,0 +1,29 @@
+name: React migration build check
+on:
+  pull_request:
+    paths:
+      - 'react-app/**'
+      - 'trailerpics/**'
+      - '.github/workflows/react-build.yml'
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: react-app
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+      - name: Build React application
+        run: npm run build
+      - name: Upload build for inspection
+        uses: actions/upload-artifact@v4
+        with:
+          name: gonzup-react-preview
+          path: dist/
+          if-no-files-found: error
