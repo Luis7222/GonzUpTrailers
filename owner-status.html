@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>GonzUp Owner Status Manager</title>
+<style>
+:root{font-family:system-ui,Arial,sans-serif;color:#1d2939;background:#f4f6f9}body{margin:0}header{background:#004080;color:white;padding:22px max(18px,calc((100vw - 1050px)/2))}h1{margin:0;font-size:1.65rem}header p{margin:8px 0 0}main{max-width:1050px;margin:auto;padding:20px}.notice{background:#fff8e5;border:1px solid #f0d28c;padding:13px;border-radius:10px;margin-bottom:16px}.toolbar,.card{background:white;border:1px solid #dce2e8;border-radius:12px;padding:16px;margin:12px 0}.toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center}input,select,button{font:inherit;padding:10px;border-radius:8px;border:1px solid #b7c2cf}input{min-width:190px;flex:1}button{cursor:pointer;background:#004080;color:white;border:0}button:disabled{opacity:.5;cursor:not-allowed}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:12px}.card{margin:0;display:flex;gap:12px}.card img{width:90px;height:110px;object-fit:cover;border-radius:7px}.info{flex:1;min-width:0}.info strong{display:block}.info small{display:block;color:#667085;margin:4px 0 10px}.info select{width:100%}.status{font-size:.85rem;font-weight:600;margin-top:8px}.available{color:#16803d}.rented{color:#b42318}.in_service{color:#856000}#feedback{font-weight:600}a{color:#004080}footer{padding:24px;text-align:center;color:#667085}@media(max-width:520px){.card img{width:75px;height:100px}}
+</style></head><body>
+<header><h1>GonzUp • Owner Dashboard</h1><p>Trailer availability management</p></header>
+<main>
+<div class="notice"><strong>Private access:</strong> This page is a convenience editor, not an authentication system. Do not publish it as a public admin route. To save changes you must supply a GitHub fine-grained token with Contents read/write access to this repository. The token is used in this browser session only and is never stored by this page. For stronger security, use the repository Actions workflow instead.</div>
+<div class="toolbar"><label for="token">GitHub access token</label><input id="token" type="password" autocomplete="off" placeholder="Paste token (not saved)"><button id="load">Load current statuses</button></div>
+<div class="toolbar"><strong id="summary">9 trailers</strong><span id="feedback" role="status" aria-live="polite"></span><button id="save" disabled>Save changes</button></div>
+<div class="grid" id="grid"></div>
+<p><a href="index.html">← View public trailer listings</a></p>
+</main><footer>GonzUp Trailers • Status Manager</footer>
+<script>
+const owner='Luis7222',repo='GonzUpTrailers';
+const trailers=[
+['trailer1','1999 CPS Belly Dump','trailerpics/trailer12.jpg'],
+['trailer2','2003 Lufkin Belly Dump','trailerpics/trailer13.jpg'],
+['trailer3','2003 Load King Belly Dump','trailerpics/trailer4.jpg'],
+['trailer4','2007 Construction Belly Dump','trailerpics/trailer6.jpg'],
+['trailer5','2007 Trailblazer Belly Dump','trailerpics/trailer7.jpg'],
+['trailer6','2008 CPS Belly Dump','trailerpics/trailer8.jpg'],
+['trailer7','2009 CTSI Belly Dump','trailerpics/trailer9.jpg'],
+['trailer8','1999 CPS Belly Dump','trailerpics/trailer10.jpg'],
+['trailer9','2001 CPS Belly Dump','trailerpics/trailer11.jpg']
+];
+const labels={available:'Available',rented:'Rented',in_service:'In Service'};
+let baseline=null,sha=null,branch=null;
+const grid=document.getElementById('grid'),feedback=document.getElementById('feedback'),save=document.getElementById('save');
+function show(message){feedback.textContent=message}
+function render(data){grid.replaceChildren();for(const [id,name,picture] of trailers){const card=document.createElement('div');card.className='card';const img=document.createElement('img');img.src=picture;img.alt=name;const info=document.createElement('div');info.className='info';const title=document.createElement('strong');title.textContent=name;const key=document.createElement('small');key.textContent=id;const select=document.createElement('select');select.dataset.id=id;for(const [value,label] of Object.entries(labels)){const option=document.createElement('option');option.value=value;option.textContent=label;select.append(option)}select.value=data[id]||'available';select.addEventListener('change',refresh);info.append(title,key,select);card.append(img,info);grid.append(card)}refresh()}
+function values(){return Object.fromEntries([...grid.querySelectorAll('select')].map(el=>[el.dataset.id,el.value]))}
+function refresh(){const data=values();const counts={available:0,rented:0,in_service:0};Object.values(data).forEach(v=>counts[v]++);document.getElementById('summary').textContent=`${counts.available} Available • ${counts.rented} Rented • ${counts.in_service} In Service`;save.disabled=!baseline||JSON.stringify(data)===JSON.stringify(baseline);if(baseline)show(save.disabled?'No unsaved changes':'Unsaved changes')}
+async function api(path,options={}){const token=document.getElementById('token').value.trim();if(!token)throw Error('Enter your GitHub token first.');const response=await fetch('https://api.github.com/repos/'+owner+'/'+repo+path,{...options,headers:{Accept:'application/vnd.github+json',Authorization:'Bearer '+token,'X-GitHub-Api-Version':'2022-11-28',...(options.headers||{})}});const result=await response.json();if(!response.ok)throw Error(result.message||'GitHub request failed');return result}
+function encode64(text){const bytes=new TextEncoder().encode(text);let binary='';for(const b of bytes)binary+=String.fromCharCode(b);return btoa(binary)}
+function decode64(text){const binary=atob(text.replace(/\s/g,''));return new TextDecoder().decode(Uint8Array.from(binary,c=>c.charCodeAt(0)))}
+document.getElementById('load').onclick=async()=>{try{show('Loading…');const repository=await api('');branch=repository.default_branch;const file=await api('/contents/trailer-status.json?ref='+encodeURIComponent(branch));sha=file.sha;baseline=JSON.parse(decode64(file.content));render(baseline);show('Loaded from '+branch)}catch(e){show('Error: '+e.message)}};
+save.onclick=async()=>{if(!baseline||!sha||!branch)return;const data=values();if(!confirm('Publish these status changes to the live website?'))return;try{save.disabled=true;show('Saving…');const result=await api('/contents/trailer-status.json',{method:'PUT',body:JSON.stringify({message:'Update trailer statuses from owner dashboard',content:encode64(JSON.stringify(data,null,2)+'\n'),sha,branch})});sha=result.content.sha;baseline=data;refresh();show('Saved! The public website may take a minute to update.')}catch(e){show('Save failed: '+e.message);refresh()}};
+render(Object.fromEntries(trailers.map(([id])=>[id,'available'])));save.disabled=true;
+</script></body></html>
